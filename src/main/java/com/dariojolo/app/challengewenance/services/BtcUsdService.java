@@ -1,10 +1,10 @@
 package com.dariojolo.app.challengewenance.services;
 
-import reactor.core.publisher.Mono;
-
-import java.util.OptionalDouble;
+import com.dariojolo.app.challengewenance.entities.ResponseObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface BtcUsdService {
-    public Mono<String> findCurrentPrice();
-    public Double getAveragePrice(String stringDateStart, String stringDateFinish);
+    String findCurrentPrice() throws JsonProcessingException;
+
+    ResponseObject getAveragePrice(String stringDateStart, String stringDateFinish);
 }

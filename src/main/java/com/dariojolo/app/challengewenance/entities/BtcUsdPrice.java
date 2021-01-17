@@ -16,4 +16,6 @@ import java.io.Serializable;
 public class BtcUsdPrice implements Serializable {
     @JsonProperty("lprice")
     private String lastPrice;
+    private String curr1;
+    private String curr2;
 }
