@@ -1,6 +1,7 @@
 package com.dariojolo.app.challengewenance;
 
 import com.dariojolo.app.challengewenance.controllers.BtcUsdController;
+import com.dariojolo.app.challengewenance.entities.DateIn;
 import com.dariojolo.app.challengewenance.entities.Fechas;
 import com.dariojolo.app.challengewenance.entities.ResponseObject;
 import com.dariojolo.app.challengewenance.services.BtcUsdService;
@@ -35,10 +36,13 @@ public class BtcUsdControllerTest {
 
     @Test
     void testgetCurrentPrice() throws Exception {
-        Mockito.when(service.findCurrentPrice()).thenReturn("35678.9");
+        Mockito.when(service.findCurrentPrice("12:49:10 17/01/2021")).thenReturn("35678.9");
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/prices"))
+                .get("/api/prices/")
+                .content(asJsonString(new DateIn("12:49:10 17/01/2021")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -51,7 +55,7 @@ public class BtcUsdControllerTest {
 
 
         this.mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/prices")
+                .get("/api/prices/avg")
                 .content(asJsonString(new Fechas("12:49:10 17/01/2021", "12:49:30 17/01/2021")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

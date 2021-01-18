@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 
+import java.text.ParseException;
+
 @SpringBootTest
 public class BtcUsdServiceTest {
 
@@ -33,8 +35,8 @@ public class BtcUsdServiceTest {
     }
 
     @Test
-    public void whenFindCurrentPrice_ThenReturnPrice() throws JsonProcessingException {
-        String found = service.findCurrentPrice();
+    public void whenFindCurrentPrice_ThenReturnPrice() throws JsonProcessingException, ParseException {
+        String found = service.findCurrentPrice("10:32:10 18/01/2021");
         Assertions.assertThat(found.equals("35678.9"));
     }
 

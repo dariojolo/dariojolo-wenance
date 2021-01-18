@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BtcUsdServiceImpl implements BtcUsdService {
@@ -26,10 +27,8 @@ public class BtcUsdServiceImpl implements BtcUsdService {
     ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public String findCurrentPrice() throws JsonProcessingException {
-        Mono<String> price = clientService.getbtcUsdPriceWebClient();
-
-        return parseJsonPrice(price);
+    public String findCurrentPrice(String date) throws JsonProcessingException, ParseException {
+        return findClosestValue(sdf.parse(date).getTime());
     }
 
     @Override
@@ -91,5 +90,33 @@ public class BtcUsdServiceImpl implements BtcUsdService {
                 list.add(value);
         }
         return list;
+    }
+
+    private String findClosestValue(Long dateMilli) {
+        TreeMap<Long, String> map;
+        map = mapPrices
+                .entrySet()
+                .stream()
+                .collect(
+                        Collectors
+                                .toMap(
+                                        Map.Entry::getKey,
+                                        Map.Entry::getValue,
+                                        (oldValue,
+                                         newValue)
+                                                -> newValue,
+                                        TreeMap::new));
+
+        Map.Entry<Long, String> low = map.floorEntry(dateMilli);
+        Map.Entry<Long, String> high = map.ceilingEntry(dateMilli);
+        String res = null;
+        if (low != null && high != null) {
+            res = Math.abs(dateMilli - low.getKey()) < Math.abs(dateMilli - high.getKey())
+                    ? low.getValue()
+                    : high.getValue();
+        } else if (low != null || high != null) {
+            res = low != null ? low.getValue() : high.getValue();
+        }
+        return res;
     }
 }
