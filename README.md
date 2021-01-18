@@ -15,7 +15,7 @@ Uno que devuelve la cotización del bitcoin en un momento dado (timestamp pasado
  ```
 3. Si se requiere hacer una consulta del promedio del precio en un tiempo determinado, se debe realizar la siguiente llamada a la API por **metodo GET** pasando por parámetro 
  un objeto **JSON** que contenga el horario de inicio y fin del periodo que se quiere consultar
-  ```http://localhost:8080/api/prices/```
+  ```http://localhost:8080/api/prices/avg```
  Ejemplo del objeto JSON a enviar, el formato de fecha y hora se debe respetar 
   ```
   {
